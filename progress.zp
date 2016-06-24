@@ -1,0 +1,41 @@
+(define-struct progressbar (len step start))
+
+(define-syntax with-progress
+  (syntax-rules (:as :to :step)
+    ((macro-expand :as name :to len :step step body ...)
+      (let ((name (make-progress-bar len step)))
+        (begin
+          body ...)))
+    ((macro-expand :as name :to len body ...)
+      (let ((name (make-progress-bar len)))
+        (begin
+          body ...)))))
+
+(define make-progress-bar
+  (case-lambda
+    ((len) (make-progress-bar len (/ len 10)))
+    ((len step) (progressbar:make-progressbar len step (car (unix-timestamp))))))
+
+(define update-progress-bar
+  (let* ((string-two (lambda (s) (++ (if (= 0 (/ s 10)) "0" "") (->string s))))
+         (fmt-time-delta (lambda (total-seconds)
+           (let* ((seconds (mod total-seconds 60))
+                  (total-minutes (/ total-seconds 60))
+                  (minutes (mod total-minutes 60))
+                  (hours (/ total-minutes 60)))
+           (++ (string-two hours) ":" (string-two minutes) ":" (string-two seconds))))))
+
+    (lambda (bar progress)
+      (let* ((len     (progressbar:get-len bar))
+             (step    (progressbar:get-step bar))
+             (percent (floor (* (/. progress len) 100)))
+             (time-delta (- (car (unix-timestamp)) (progressbar:get-start bar))))
+        (display (++ "\r["
+                     (string:replicate (floor (/ progress step)) "#")
+                     (string:replicate (ceil (/. (- len progress) step)) " ")
+                     "] " (->string percent) "% (" (->string progress) "/" (->string len) ") "
+                     "Elapsed Time: "
+                     (fmt-time-delta time-delta)
+                     " ETA: "
+                     (fmt-time-delta (floor (* time-delta (/. (- 100 percent) (max percent 1))))))
+               :flush)))))

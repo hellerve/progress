@@ -1,0 +1,4 @@
+(with-progress :as bar :to 500 :step 10
+  (for 501 ((update-progress-bar bar i) (system "sleep" ["0.1"]))))
+
+(exit 0)
