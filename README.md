@@ -5,7 +5,7 @@ A simple progress bar widget for the command line in zepto.
 # Installation
 
 ```
-zeps install hellevre/progress
+zeps install hellerve/progress
 ```
 
 # Example Output
@@ -26,7 +26,7 @@ create a context in which it will run (using `with-progress-bar`).
 
 
 (with-progress :as my-progress :to 100 :step 10 ; the same as above, but creating a context
-  (for 101 ((update-progress-bar my-progress i) (system "sleep" ["0.1"])))
+  (for 101 ((update-progress-bar my-progress i) (system "sleep" ["0.1"]))) ; we are using the implicit loop counter i that is provided by the for macro
   (write "Done!")
   (exit 0))
 ```
