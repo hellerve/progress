@@ -1,6 +1,6 @@
 (define-struct progressbar (len step start))
 
-(define-syntax with-progress
+(define-syntax with-progress-bar
   (syntax-rules (:as :to :step)
     ((macro-expand :as name :to len :step step body ...)
       (let ((name (make-progress-bar len step)))

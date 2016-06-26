@@ -25,7 +25,7 @@ create a context in which it will run (using `with-progress-bar`).
 (update-progress-bar my-progress 10) ; 10 elements have ben processed
 
 
-(with-progress :as my-progress :to 100 :step 10 ; the same as above, but creating a context
+(with-progress-bar :as my-progress :to 100 :step 10 ; the same as above, but creating a context
   (for 101 ((update-progress-bar my-progress i) (system "sleep" ["0.1"]))) ; we are using the implicit loop counter i that is provided by the for macro
   (write "Done!")
   (exit 0))
