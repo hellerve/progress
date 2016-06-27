@@ -1,4 +1,4 @@
-(define-struct progressbar (len step start))
+(define-struct progressbar (len step start fill free))
 
 (define-syntax with-progress-bar
   (syntax-rules (:as :to :step)
@@ -11,10 +11,10 @@
         (begin
           body ...)))))
 
-(define make-progress-bar
-  (case-lambda
-    ((len) (make-progress-bar len (/ len 10)))
-    ((len step) (progressbar:make-progressbar len step (car (unix-timestamp))))))
+(defkeywords (make-progress-bar len) (:step :default (/ len 10)
+                                      :fill :default "#"
+                                      :free :default " ")
+  (progressbar:make-progressbar len step (car (unix-timestamp)) fill free))
 
 (define update-progress-bar
   (let* ((string-two (lambda (s) (++ (if (= 0 (/ s 10)) "0" "") (->string s))))
@@ -28,11 +28,13 @@
     (lambda (bar progress)
       (let* ((len     (progressbar:get-len bar))
              (step    (progressbar:get-step bar))
+             (fill    (progressbar:get-fill bar))
+             (free    (progressbar:get-free bar))
              (percent (floor (* (/. progress len) 100)))
              (time-delta (- (car (unix-timestamp)) (progressbar:get-start bar))))
         (display (++ "\r["
-                     (string:replicate (floor (/ progress step)) "#")
-                     (string:replicate (ceil (/. (- len progress) step)) " ")
+                     (string:replicate (floor (/ progress step)) fill)
+                     (string:replicate (ceil (/. (- len progress) step)) free)
                      "] " (->string percent) "% (" (->string progress) "/" (->string len) ") "
                      "Elapsed Time: "
                      (fmt-time-delta time-delta)

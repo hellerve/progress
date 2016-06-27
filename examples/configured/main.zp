@@ -1,0 +1,5 @@
+(load "progress/progress")
+(define bar (make-progress-bar 250 :step 10 :fill "=" :free "-"))
+
+(for 250 ((update-progress-bar bar i) (system "sleep" ["0.1"])))
+(exit 0)

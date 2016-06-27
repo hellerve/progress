@@ -21,7 +21,8 @@ create a context in which it will run (using `with-progress-bar`).
 
 ```clojure
 (define my-progress (make-progress-bar 100)) ; 100 is the total size of elements, step size will be 10
-(define my-progress (make-progress-bar 100 1)) ; the same as above, but the step size will be 1
+(define my-progress (make-progress-bar 100 :step 1)) ; the same as above, but the step size will be 1
+(define bar (make-progress-bar 200 :step 10 :fill "=" :free "-")) ; the fully configured version
 (update-progress-bar my-progress 10) ; 10 elements have ben processed
 
 
