@@ -14,6 +14,12 @@
 (defkeywords (make-progress-bar len) (:step :default (/ len 10)
                                       :fill :default "#"
                                       :free :default " ")
+  "create a new progress bar holding <par>len</par> elements.
+
+   params:
+    - len: an integer denoting the length of the progress bar
+   complexity: O(1)
+   returns: a new progress-bar instance"
   (progressbar:make-progressbar len step (car (unix-timestamp)) fill free))
 
 (define update-progress-bar
@@ -26,6 +32,14 @@
            (++ (string-two hours) ":" (string-two minutes) ":" (string-two seconds))))))
 
     (lambda (bar progress)
+      "update a progress bar <par>bar</par> with <par>progress</par> and write
+       the new status to stdout.
+
+       params:
+        - bar: a progress bar generated with <fun>make-progress-bar</fun>
+        - progress: an integer denoting the progress
+       complexity: O(1)
+       returns: nil"
       (let* ((len     (progressbar:get-len bar))
              (step    (progressbar:get-step bar))
              (fill    (progressbar:get-fill bar))

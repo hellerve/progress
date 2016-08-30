@@ -1,10 +1,10 @@
-#{:name "progress" 
-  :version "0.0.2"
-  :license "GPLv2" 
+#{:name "progress"
+  :version "0.0.3"
+  :license "GPLv2"
   :type :library
   :tests []
   :author #{:name "Veit Heller"
-            :email "veit@veitheller.de" 
+            :email "veit@veitheller.de"
             :github "@hellerve"}
   :zepto #{:version :any
            :ez #f
